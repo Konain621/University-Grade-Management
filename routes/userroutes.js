@@ -10,19 +10,13 @@ router.post('/register', usercontroller.register);
 // Login a user
 router.post('/login', usercontroller.login);
 
-// Admin-only route
-router.get('/admin', authmiddleware, checkrole(['admin']), (req, res) => {
-  res.json({ message: 'Welcome, admin!' });
-});
+// Admin-only route: Get all users
+router.get('/admin/users', authmiddleware, checkrole(['admin']), usercontroller.getAllUsers);
 
-// Teacher-only route
-router.get('/teacher', authmiddleware, checkrole(['admin', 'teacher']), (req, res) => {
-  res.json({ message: 'Welcome, teacher!' });
-});
+// Teacher-only route: Get all students' records
+router.get('/teacher/students', authmiddleware, checkrole(['teacher']), usercontroller.getAllStudents);
 
-// Student-only route
-router.get('/student', authmiddleware, checkrole(['admin', 'teacher', 'student']), (req, res) => {
-  res.json({ message: 'Welcome, student!' });
-});
+// Student-only route: Get their own record
+router.get('/student/profile', authmiddleware, checkrole(['student']), usercontroller.getStudentProfile);
 
 module.exports = router;

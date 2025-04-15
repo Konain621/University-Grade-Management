@@ -1,27 +1,28 @@
 pipeline {
   agent any
 
-  environment {
-    MONGO_URI = 'mongodb://mongo:27017/university'
-  }
-
   stages {
-    stage('Clone Repo') {
+    stage('Clean Old Containers') {
       steps {
-        echo 'Cloning repo...'
+        echo '🧹 Cleaning up previously running containers...'
+        sh '''
+          docker ps -aq --filter "name=university-mongo" | xargs -r docker rm -f
+          docker ps -aq --filter "name=university-jenkins" | xargs -r docker rm -f
+          docker-compose down --remove-orphans || true
+        '''
       }
     }
 
-    stage('Build App') {
+    stage('Build') {
       steps {
-        echo 'Building Docker containers...'
+        echo '🔧 Building services...'
         sh 'docker-compose build'
       }
     }
 
-    stage('Run App') {
+    stage('Run') {
       steps {
-        echo 'Running containers...'
+        echo '🚀 Running services...'
         sh 'docker-compose up -d'
       }
     }

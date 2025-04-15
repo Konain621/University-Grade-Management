@@ -19,6 +19,7 @@ services:
       context: .
       dockerfile: Dockerfile.jenkins
      container_name: university-jenkins
+     user: root
      ports:
       - "8080:8080"
       - "50000:50000"
@@ -27,7 +28,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
      networks:
       - university-app
-    
+  
 
   mongo:
     image: mongo:5.0

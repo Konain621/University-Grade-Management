@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  nodeapp:
+    build: ./node-app
+    image: university-nodeapp  # Explicit image name
+    container_name: university-nodeapp  # Explicit container name
+    ports:
+      - "4000:4000"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/university
+    depends_on:
+      - mongo
+    networks:
+      - university-app
+
+networks:
+  university-app:
+    external: true

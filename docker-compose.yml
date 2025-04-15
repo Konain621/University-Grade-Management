@@ -14,16 +14,18 @@ services:
     networks:
       - university-app
 
-  jenkins:
-    image: jenkins/jenkins:lts
-    container_name: university-jenkins
-    user: root
-    ports:
+    jenkins:
+     build:
+      context: .
+      dockerfile: Dockerfile.jenkins
+     container_name: university-jenkins
+     ports:
       - "8080:8080"
       - "50000:50000"
     volumes:
       - jenkins_home:/var/jenkins_home
-      - /var/run/docker.sock:/var/run/docker.sock  # allow Jenkins to run Docker
+      - /var/run/docker.sock:/var/run/docker.sock
+
 
   mongo:
     image: mongo:5.0

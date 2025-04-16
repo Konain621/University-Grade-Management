@@ -1,35 +1,17 @@
-version: "3.8"
+version: '3.8'
 
 services:
-  mongo:
-    image: mongo:5.0
-    container_name: university-mongo
+  nodeapp:
+    build: ./node-app
+    image: university-nodeapp  # Explicit image name
+    container_name: university-nodeapp  # Explicit container name
     ports:
-      - "27017:27017"
-    volumes:
-      - mongo_data:/data/db
-    networks:
-      - university-app
-
-  jenkins:
-    build:
-      context: .
-      dockerfile: Dockerfile.jenkins
-    container_name: university-jenkins
-    user: root
-    ports:
-      - "8080:8080"
-      - "50000:50000"
-    volumes:
-      - jenkins_home:/var/jenkins_home
-      - /var/run/docker.sock:/var/run/docker.sock
+      - "4000:4000"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/university
     networks:
       - university-app
 
 networks:
   university-app:
-    driver: bridge
-
-volumes:
-  mongo_data:
-  jenkins_home:
+    external: true

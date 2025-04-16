@@ -4,13 +4,25 @@ pipeline {
   environment {
     IMAGE_NAME = "university-nodeapp"
     CONTAINER_NAME = "university-nodeapp"
+    MONGO_URI = "mongodb://mongo:27017/university"
+    NETWORK = "university-app"
+    PORT = "3000"
   }
 
   stages {
     stage('Build Node App Image') {
       steps {
         echo '🔧 Building Docker image for Node App...'
-        sh 'docker build -t $IMAGE_NAME ./nodeapp'
+        sh '''
+          docker build -t $IMAGE_NAME ./nodeapp
+        '''
+      }
+    }
+
+    stage('Remove Previous Container') {
+      steps {
+        echo '🧹 Cleaning up any existing container...'
+        sh 'docker rm -f $CONTAINER_NAME || true'
       }
     }
 
@@ -18,13 +30,21 @@ pipeline {
       steps {
         echo '🚀 Running Node App container...'
         sh '''
-          docker rm -f $CONTAINER_NAME || true
           docker run -d --name $CONTAINER_NAME \
-            --network university-app \
-            -e MONGO_URI=mongodb://mongo:27017/university \
-            -p 3000:3000 $IMAGE_NAME
+            --network $NETWORK \
+            -e MONGO_URI=$MONGO_URI \
+            -p $PORT:$PORT $IMAGE_NAME
         '''
       }
+    }
+  }
+
+  post {
+    failure {
+      echo '❌ Build or run failed.'
+    }
+    success {
+      echo '✅ Node app is now running!'
     }
   }
 }

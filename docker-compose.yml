@@ -2,7 +2,9 @@ version: '3.8'
 
 services:
   nodeapp:
-    build: ./node-app
+    build: 
+      context: .
+      dockerfile: Dockerfile
     image: university-nodeapp  # Explicit image name
     container_name: university-nodeapp  # Explicit container name
     ports:

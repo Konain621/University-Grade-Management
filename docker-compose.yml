@@ -1,35 +1,6 @@
 version: "3.8"
 
 services:
-  nodeapp:
-    build: .
-    image: university-nodeapp
-    container_name: university-nodeapp
-    ports:
-      - "3000:3000"
-    environment:
-      - MONGO_URI=mongodb://mongo:27017/university
-    depends_on:
-      - mongo
-    networks:
-      - university-app
-
-  jenkins:
-     build:
-      context: .
-      dockerfile: Dockerfile.jenkins
-     container_name: university-jenkins
-     user: root
-     ports:
-      - "8080:8080"
-      - "50000:50000"
-     volumes:
-      - jenkins_home:/var/jenkins_home
-      - /var/run/docker.sock:/var/run/docker.sock
-     networks:
-      - university-app
-  
-
   mongo:
     image: mongo:5.0
     container_name: university-mongo
@@ -40,27 +11,25 @@ services:
     networks:
       - university-app
 
-  mongo-express:
-    image: mongo-express
-    container_name: mongo-ui
+  jenkins:
+    build:
+      context: .
+      dockerfile: Dockerfile.jenkins
+    container_name: university-jenkins
+    user: root
     ports:
-      - "8081:8081"
-    environment:
-      - ME_CONFIG_MONGODB_SERVER=mongo
-      - ME_CONFIG_MONGODB_PORT=27017
-      - ME_CONFIG_BASICAUTH_USERNAME=admin
-      - ME_CONFIG_BASICAUTH_PASSWORD=pass
-    depends_on:
-      - mongo
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - university-app
- 
-    
-volumes:
-  mongo_data:
-  jenkins_home:
 
 networks:
   university-app:
-    external: true
+    driver: bridge
 
+volumes:
+  mongo_data:
+  jenkins_home:

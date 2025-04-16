@@ -1,0 +1,30 @@
+pipeline {
+  agent any
+
+  environment {
+    IMAGE_NAME = "university-nodeapp"
+    CONTAINER_NAME = "university-nodeapp"
+  }
+
+  stages {
+    stage('Build Node App Image') {
+      steps {
+        echo '🔧 Building Docker image for Node App...'
+        sh 'docker build -t $IMAGE_NAME ./nodeapp'
+      }
+    }
+
+    stage('Run Node App Container') {
+      steps {
+        echo '🚀 Running Node App container...'
+        sh '''
+          docker rm -f $CONTAINER_NAME || true
+          docker run -d --name $CONTAINER_NAME \
+            --network university-app \
+            -e MONGO_URI=mongodb://mongo:27017/university \
+            -p 3000:3000 $IMAGE_NAME
+        '''
+      }
+    }
+  }
+}

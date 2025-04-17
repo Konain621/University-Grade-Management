@@ -1,7 +1,7 @@
 // File: server.js
 const express = require('express');
 const mongoose = require('mongoose');
-require('dotenv').config;
+require("dotenv").config;
 const userroutes = require('./routes/userroutes');
 const graderoutes = require('./routes/graderoutes');
 

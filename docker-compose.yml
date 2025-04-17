@@ -8,7 +8,7 @@ services:
     image: university-nodeapp  # Explicit image name
     container_name: university-nodeapp  # Explicit container name
     ports:
-      - "4000:4000"
+      - "4002:4001"
     networks:
       - university-app
     volumes:
@@ -16,7 +16,7 @@ services:
       - /app/node_modules
     environment:
       MONGO_URI: mongodb://localhost:27017/university
-      PORT: 3000
+      PORT: 4001
       JWT_SECRET: your_jwt_secret
 
 networks:

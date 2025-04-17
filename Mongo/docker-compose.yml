@@ -8,7 +8,7 @@ services:
     volumes:
       - mongo_data:/data/db
     networks:
-      university-app
+     - university-app
 
   # Mongo Express
   mongo-express:
@@ -24,7 +24,7 @@ services:
     depends_on:
       - mongo
     networks:
-      university-app
+      - university-app
 
 volumes:
   mongo_data:

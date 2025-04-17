@@ -16,11 +16,11 @@ services:
     ports:
       - "8081:8081"
     environment:
-      - MONGO_URI: mongodb://mongo:27017/university
-      - ME_CONFIG_MONGODB_SERVER: mongo
-      - ME_CONFIG_MONGODB_PORT: 27017
-      - ME_CONFIG_BASICAUTH_USERNAME: admin
-      - ME_CONFIG_BASICAUTH_PASSWORD: pass
+       MONGO_URI: mongodb://mongo:27017/university
+       ME_CONFIG_MONGODB_SERVER: mongo
+       ME_CONFIG_MONGODB_PORT: 27017
+       ME_CONFIG_BASICAUTH_USERNAME: admin
+       ME_CONFIG_BASICAUTH_PASSWORD: pass
     depends_on:
       - mongo
     networks:

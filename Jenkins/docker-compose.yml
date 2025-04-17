@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   jenkins:
     build:
@@ -13,6 +15,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
       DOCKER_HOST: unix:///var/run/docker.sock
+    restart: unless-stopped
     networks:
       - university-app
 

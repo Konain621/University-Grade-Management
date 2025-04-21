@@ -4,15 +4,18 @@ services:
   # MongoDB
   mongo:
     image: mongo:5.0
-
+    container_name: mongo
     volumes:
       - mongo_data:/data/db
     networks:
-     - university-app
+      - university-app
+    ports:
+      - "27017:27017"  # Optional: expose MongoDB port to host (useful for debugging)
 
   # Mongo Express
   mongo-express:
     image: mongo-express
+    container_name: mongo-express
     ports:
       - "8081:8081"
     environment:
@@ -31,3 +34,5 @@ volumes:
 
 networks:
   university-app:
+    external: true  # Assuming the external network 'university-app' already exists
+

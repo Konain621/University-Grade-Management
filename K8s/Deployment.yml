@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: university-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nodeapp
+  template:
+    metadata:
+      labels:
+        app: nodeapp
+    spec:
+      containers:
+        - name: nodeapp
+          image: university-nodeapp  # Make sure this is your correct Docker image
+          ports:
+            - containerPort: 4001
+          envFrom:
+            - configMapRef:
+                name: nodeapp-config
+            - secretRef:
+                name: nodeapp-secrets
+          volumeMounts:
+            - name: app-volume
+              mountPath: /app
+            - name: node-modules-volume
+              mountPath: /app/node_modules
+        - name: mongo
+          image: mongo:5.0
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - mountPath: /data/db
+              name: mongo-data
+
+      volumes:
+        - name: app-volume
+          hostPath:
+            path: /path/to/your/app  # Update this path to your application code
+        - name: node-modules-volume
+          emptyDir: {}
+        - name: mongo-data
+          emptyDir: {}
